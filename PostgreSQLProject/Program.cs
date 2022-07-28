@@ -2,16 +2,32 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Threading;
 
 namespace PostgreSQLProject
 {
     internal class Program
     {
+        private static List<User> users;
         static void Main(string[] args)
         {
             //InsertUsers(1000);
             //UpdateUser(1, new User("A0", "+37498264752", DateTime.Now));
-            List<User> users = ReadData();
+            //List<User> users = ReadData();
+            Thread thread = new Thread(FirstQuery);
+            Thread thread1 = new Thread(SecondQuery);
+            thread.Start();
+            thread1.Start();
+        }
+
+        static void FirstQuery()
+        {
+            users = ReadData();
+        }
+
+        static void SecondQuery()
+        {
+            UpdateUser(35, new User("A30", "+37456251836", DateTime.Now));
         }
 
         static void InsertUsers(int count)
@@ -56,7 +72,7 @@ namespace PostgreSQLProject
                 }
             }
 
-            return users; 
+            return users;
         }
 
         static User ReadUser(NpgsqlDataReader reader)
@@ -79,7 +95,7 @@ namespace PostgreSQLProject
 
         static void UpdateUser(int id, User user)
         {
-            using(NpgsqlConnection con = GetConnection())
+            using (NpgsqlConnection con = GetConnection())
             {
                 con.Open();
                 string query = $"update public.Users set Name = @name, Number = @number, Date = @date where Id = @id";
