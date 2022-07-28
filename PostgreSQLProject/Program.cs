@@ -9,6 +9,7 @@ namespace PostgreSQLProject
         static void Main(string[] args)
         {
             //InsertUsers(1000);
+
         }
 
         static void InsertUsers(int count)
@@ -19,11 +20,26 @@ namespace PostgreSQLProject
                 Random rnd = new Random();
                 for (int i = 0; i < count; i++)
                 {
-                    string query = $"insert into public.Users(Name, Number, Date) values('A{i}', '+374{rnd.Next(90000000, 99999999)}', '{DateTime.Now}')";
-                    NpgsqlCommand command = new NpgsqlCommand(query, con);
-                    command.ExecuteNonQuery();
+                    User user = new User($"A{i}", $"+374{rnd.Next(90000000, 99999999)}", DateTime.Now);
+                    AddUser(user);
                 }
             }
+        }
+
+        static void AddUser(User user)
+        {
+            using (NpgsqlConnection con = GetConnection())
+            {
+                con.Open();
+                string query = $"insert into public.Users(Name, Number, Date) values('{user.Name}', '{user.Number}', '{user.Date}')";
+                NpgsqlCommand command = new NpgsqlCommand(query, con);
+                command.ExecuteNonQuery();
+            }
+        }
+
+        static void ReadData()
+        {
+
         }
 
         static NpgsqlConnection GetConnection()
