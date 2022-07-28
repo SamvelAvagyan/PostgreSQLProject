@@ -4,6 +4,8 @@ namespace PostgreSQLProject
 {
     internal class User
     {
+        public User() { }
+
         public User(string name, string number, DateTime date)
         {
             Name = name;

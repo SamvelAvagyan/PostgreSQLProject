@@ -1,5 +1,6 @@
 ﻿using Npgsql;
 using System;
+using System.Collections.Generic;
 using System.Data;
 
 namespace PostgreSQLProject
@@ -9,7 +10,7 @@ namespace PostgreSQLProject
         static void Main(string[] args)
         {
             //InsertUsers(1000);
-
+            List<User> users = ReadData();
         }
 
         static void InsertUsers(int count)
@@ -37,9 +38,42 @@ namespace PostgreSQLProject
             }
         }
 
-        static void ReadData()
+        static List<User> ReadData()
         {
+            List<User> users = new List<User>();
+            using (NpgsqlConnection con = GetConnection())
+            {
+                string query = "select * from Users";
+                con.Open();
+                NpgsqlCommand command = new NpgsqlCommand(query, con);
+                NpgsqlDataReader reader = command.ExecuteReader();
 
+                while (reader.Read())
+                {
+                    User user = ReadUser(reader);
+                    users.Add(user);
+                }
+            }
+
+            return users; 
+        }
+
+        static User ReadUser(NpgsqlDataReader reader)
+        {
+            int? id = reader["Id"] as int?;
+            string name = reader["Name"] as string;
+            string number = reader["Number"] as string;
+            DateTime date = (DateTime)reader["Date"];
+
+            User user = new User
+            {
+                Id = (int)id,
+                Name = name,
+                Number = number,
+                Date = date
+            };
+
+            return user;
         }
 
         static NpgsqlConnection GetConnection()
