@@ -10,6 +10,7 @@ namespace PostgreSQLProject
         static void Main(string[] args)
         {
             //InsertUsers(1000);
+            //UpdateUser(1, new User("A0", "+37498264752", DateTime.Now));
             List<User> users = ReadData();
         }
 
@@ -74,6 +75,23 @@ namespace PostgreSQLProject
             };
 
             return user;
+        }
+
+        static void UpdateUser(int id, User user)
+        {
+            using(NpgsqlConnection con = GetConnection())
+            {
+                con.Open();
+                string query = $"update public.Users set Name = @name, Number = @number, Date = @date where Id = @id";
+                using (NpgsqlCommand command = new NpgsqlCommand(query, con))
+                {
+                    command.Parameters.AddWithValue("id", id);
+                    command.Parameters.AddWithValue("name", user.Name);
+                    command.Parameters.AddWithValue("number", user.Number);
+                    command.Parameters.AddWithValue("date", user.Date);
+                    command.ExecuteNonQuery();
+                }
+            }
         }
 
         static NpgsqlConnection GetConnection()
