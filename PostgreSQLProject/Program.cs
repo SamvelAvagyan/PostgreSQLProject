@@ -14,7 +14,7 @@ namespace PostgreSQLProject
 
         static void Main(string[] args)
         {
-            InsertUsers(1000);
+            //InsertUsers(1000);
             //UpdateUser(1, new User("A0", "+37498264752", DateTime.Now));
             //List<User> users = ReadData();
             //Thread thread = new Thread(FirstQuery);

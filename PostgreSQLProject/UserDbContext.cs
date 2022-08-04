@@ -8,7 +8,7 @@ namespace PostgreSQLProject
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseNpgsql("Server=localhost;Port=5432;User Id=postgres;Password=root1234;Database=myDB");
+            optionsBuilder.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=root1234;Database=myDB");
         }
     }
 }
