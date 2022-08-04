@@ -33,7 +33,8 @@ namespace PostgreSQLProject.Api
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PostgreSQLProject.Api", Version = "v1" });
             });
 
-            services.AddDbContext<UserDbContext>(con => con.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=root1234;Database=myDB"));
+            services.AddDbContextFactory<UserDbContext>(con => con.UseNpgsql("Host=localhost;Port=5432;Username=postgres;Password=root1234;Database=myDB"));
+            //services.AddTransient<DbContext, UserDbContext>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
